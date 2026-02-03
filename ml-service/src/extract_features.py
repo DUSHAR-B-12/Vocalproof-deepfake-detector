@@ -6,7 +6,6 @@ Extracts MFCCs, pitch, jitter, and energy (RMS) per audio file; combines into a 
 import numpy as np
 import pandas as pd
 import librosa
-import parselmouth
 from pathlib import Path
 
 from .preprocess import load_and_preprocess
@@ -19,8 +18,15 @@ FEATURES_CSV = "features/features.csv"
 def _compute_pitch_and_jitter(waveform: np.ndarray, sr: int = TARGET_SR) -> tuple[float, float]:
     """
     Compute mean fundamental frequency (F0) and jitter (cycle-to-cycle instability).
-    Uses Parselmouth (Praat). Returns (mean_pitch_hz, jitter).
+    Uses Parselmouth (Praat) when available. If `parselmouth` is not installed,
+    returns (0.0, 0.0) and prints a warning.
     """
+    try:
+        import parselmouth
+    except Exception:
+        print("parselmouth not available — returning zeros for pitch and jitter.")
+        return 0.0, 0.0
+
     sound = parselmouth.Sound(waveform, sampling_frequency=sr)
     pitch = sound.to_pitch(pitch_floor=75, pitch_ceiling=600)
     f0_values = pitch.selected_array["frequency"]
@@ -91,9 +97,26 @@ def extract_features(
         str(p) for p in data_path.rglob("*")
         if p.suffix.lower() in exts and p.is_file()
     ]
+    # If output CSV exists, read already-processed filepaths and skip them (resume support)
+    processed_paths = set()
+    out_path = Path(output_csv)
+    if out_path.is_file():
+        try:
+            existing = pd.read_csv(out_path)
+            if "filepath" in existing.columns:
+                processed_paths = set(existing["filepath"].astype(str).tolist())
+                print(f"Found existing features CSV with {len(processed_paths)} files; will skip them.")
+        except Exception:
+            # If reading fails, ignore and re-create CSV
+            processed_paths = set()
+    # Filter out already-processed files
+    original_count = len(audio_files)
+    audio_files = [p for p in audio_files if p not in processed_paths]
     if max_files is not None and len(audio_files) > max_files:
         audio_files = audio_files[:max_files]
         print(f"Processing first {max_files} files (use max_files=None for all).")
+    if processed_paths:
+        print(f"Skipping {original_count - len(audio_files)} already-processed files.")
     if not audio_files:
         raise FileNotFoundError(f"No audio files found in {data_dir}")
 
@@ -106,11 +129,24 @@ def extract_features(
         except Exception as e:
             print(f"Skipping {path}: {e}")
             continue
-    df = pd.DataFrame(rows, columns=["filepath"] + feature_names)
-    out_path = Path(output_csv)
+
+    new_df = pd.DataFrame(rows, columns=["filepath"] + feature_names)
     out_path.parent.mkdir(parents=True, exist_ok=True)
-    df.to_csv(out_path, index=False)
-    print(f"Saved features for {len(df)} files to {output_csv}")
+
+    # If CSV existed, append new rows; otherwise write new CSV
+    if out_path.is_file():
+        try:
+            existing = pd.read_csv(out_path)
+            combined = pd.concat([existing, new_df], ignore_index=True)
+            combined.to_csv(out_path, index=False)
+            print(f"Appended {len(new_df)} new files; total now {len(combined)} samples in {output_csv}")
+        except Exception as e:
+            # If append fails, overwrite with new dataframe
+            new_df.to_csv(out_path, index=False)
+            print(f"Failed to append to existing CSV (error: {e}). Wrote {len(new_df)} rows to {output_csv}")
+    else:
+        new_df.to_csv(out_path, index=False)
+        print(f"Saved features for {len(new_df)} files to {output_csv}")
 
 
 if __name__ == "__main__":
