@@ -1,0 +1,28 @@
+﻿# Exclude Audio Dataset
+../data/Audio_Dataset/
+data/Audio_Dataset/
+
+# Exclude large audio files
+data/processed/
+*.wav
+
+# Exclude feature files
+data/features/
+
+# Exclude cache and Python files
+__pycache__/
+*.pyc
+.pytest_cache/
+*.pyo
+*.pyd
+.Python
+*.so
+
+# Exclude model files (if not needed)
+models/*.pth
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
