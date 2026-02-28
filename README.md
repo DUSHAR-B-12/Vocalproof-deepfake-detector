@@ -59,7 +59,6 @@ Copy `.env.example` to `.env` and modify as needed.
 
 ---
 
-## 📡 API
 
 ### `POST /predict`
 
