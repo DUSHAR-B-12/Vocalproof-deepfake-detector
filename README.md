@@ -116,10 +116,4 @@ Requires dataset in `data/dataset/` with `metadata_clean.csv`.
 
 ---
 
-## 📝 License
-
-MIT
-
----
-
 **Built with ❤️ by VoiceShield AI**
