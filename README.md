@@ -28,35 +28,6 @@ python run_server.py
 
 ---
 
-## 📁 Project Structure
-
-```
-AIfakevoicesddetection/
-├── training/               ← Model + feature extraction + config
-│   ├── config.py           ← All hyperparameters (env-var overridable)
-│   ├── feature_extraction.py ← Log-mel spectrogram extraction
-│   ├── spec_augment.py     ← SpecAugment Keras layer
-│   ├── model.py            ← ResNet binary classifier
-│   ├── dataset.py          ← tf.data pipeline
-│   ├── metrics.py          ← AUC, EER, confusion matrix
-│   ├── train.py            ← Training orchestrator
-│   └── resplit.py          ← Speaker-level stratified splitting
-├── frontend/               ← Professional web UI
-│   ├── index.html
-│   ├── style.css
-│   └── script.js
-├── inference/              ← Ensemble prediction
-│   └── ensemble_predict.py
-├── data/                   ← Dataset + models (gitignored)
-│   ├── dataset/
-│   └── models/
-├── run_server.py           ← FastAPI server
-├── requirements.txt
-├── .env.example            ← Environment config template
-└── .gitignore
-```
-
----
 
 ## 🏗️ Architecture
 
