@@ -1,28 +1,44 @@
-﻿# Exclude Audio Dataset
-../data/Audio_Dataset/
-data/Audio_Dataset/
-
-# Exclude large audio files
-data/processed/
-*.wav
-
-# Exclude feature files
-data/features/
-
-# Exclude cache and Python files
+﻿# Python
 __pycache__/
 *.pyc
-.pytest_cache/
 *.pyo
 *.pyd
 .Python
 *.so
+.pytest_cache/
 
-# Exclude model files (if not needed)
-models/*.pth
+# Virtual environments
+.venv/
+venv/
+env/
 
 # IDE
 .vscode/
 .idea/
 *.swp
 *.swo
+
+# Large data files — do NOT push to GitHub
+data/dataset/
+data/uploads/
+data/logs/
+*.wav
+*.flac
+*.mp3
+
+# Model weights — too large for GitHub
+# (use Git LFS or share separately)
+data/models/**/*.keras
+data/models/**/*.h5
+*.pkl
+
+# Logs
+*.log
+training_log.txt
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Environment
+.env

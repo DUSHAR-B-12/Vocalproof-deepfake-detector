@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VoiceShield — AI Deepfake Voice Detection</title>
+    <meta name="description"
+        content="Detect AI-generated deepfake voices with VoiceShield — powered by ResNet deep learning.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+
+<body>
+
+    <div class="container">
+
+        <!-- ── Header ─────────────────────────────────────── -->
+        <header class="header">
+            <div class="header__icon">🛡️</div>
+            <h1 class="header__title">VoiceShield</h1>
+            <p class="header__subtitle">AI-Powered Deepfake Voice Detection</p>
+        </header>
+
+        <!-- ── Main Card ──────────────────────────────────── -->
+        <main class="card">
+
+            <!-- Drop Zone -->
+            <div class="drop-zone" id="dropZone">
+                <svg class="drop-zone__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"
+                    stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4" />
+                    <polyline points="17 8 12 3 7 8" />
+                    <line x1="12" y1="3" x2="12" y2="15" />
+                </svg>
+                <p class="drop-zone__text">
+                    Drag & drop your audio file here<br>
+                    or <strong>click to browse</strong>
+                </p>
+                <p class="drop-zone__hint">Supports: WAV, FLAC, MP3, M4A, OGG</p>
+                <div class="drop-zone__file-name" id="fileName"></div>
+                <input class="drop-zone__input" type="file" id="fileInput" accept=".wav,.flac,.mp3,.m4a,.ogg">
+            </div>
+
+            <!-- Audio Preview -->
+            <div class="audio-preview" id="audioPreview">
+                <audio id="audioPlayer" controls></audio>
+            </div>
+
+            <!-- Predict Button -->
+            <button class="btn-predict" id="predictBtn" disabled>
+                🔍 Analyze Voice
+            </button>
+
+            <!-- Loading Spinner -->
+            <div class="spinner-wrapper" id="spinnerWrapper">
+                <div class="spinner"></div>
+                <span class="spinner-text">Analyzing audio...</span>
+            </div>
+
+            <!-- Status Messages -->
+            <div class="status-msg" id="statusMsg"></div>
+
+            <!-- Results -->
+            <div class="result" id="result">
+                <div class="result__badge" id="resultBadge"></div>
+                <div class="result__label" id="resultLabel"></div>
+                <div class="result__confidence-text">
+                    Confidence: <span id="confText"></span>
+                </div>
+                <div class="progress-bar">
+                    <div class="progress-bar__fill" id="progressFill"></div>
+                </div>
+            </div>
+
+        </main>
+
+        <!-- ── Footer ─────────────────────────────────────── -->
+        <footer class="footer">
+            Powered by <strong>VoiceShield AI</strong> · ResNet + Log-Mel Spectrogram
+        </footer>
+
+    </div>
+
+    <script src="/static/script.js"></script>
+</body>
+
+</html>
