@@ -22,8 +22,6 @@ pip install -r requirements.txt
 # 4. Start the server
 python run_server.py
 
-# 5. Open the UI
-# → http://127.0.0.1:8000/ui
 ```
 
 ---
