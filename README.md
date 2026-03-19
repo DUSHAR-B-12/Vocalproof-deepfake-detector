@@ -113,4 +113,4 @@ Requires dataset in `data/dataset/` with `metadata_clean.csv`.
 
 ---
 
-**Built with ❤️ by VoiceShield AI**
+**Built with ❤️**
